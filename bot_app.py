@@ -30,7 +30,7 @@ chat_histories = {}
 
 def call_gemini(contents, system_instruction=None, retries=5):
     """Calls Gemini 3.6-flash API with retries and exponential backoff."""
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={GEMINI_API_KEY}"
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key={GEMINI_API_KEY}"
     
     payload = {
         "contents": contents
@@ -152,6 +152,9 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     for i in range(max_iterations):
         logger.info(f"ReAct Loop Iteration {i+1}/{max_iterations}...")
+        if i > 0:
+            logger.info("Sleeping 5 seconds to pace API calls...")
+            time.sleep(5)
         try:
             llm_response = call_gemini(contents, system_instruction)
             logger.info(f"LLM Response:\n{llm_response}")
