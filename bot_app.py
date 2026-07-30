@@ -86,6 +86,9 @@ def upload_log_to_gcs():
     try:
         if not os.path.exists(LOG_FILENAME):
             return
+        if not os.path.exists(GCS_KEY_FILE):
+            logger.info("GCS key file not found, skipping GCS upload backup.")
+            return
         client = storage.Client.from_service_account_json(GCS_KEY_FILE)
         bucket = client.bucket(GCS_BUCKET_NAME)
         blob = bucket.blob(LOG_FILENAME)
@@ -293,8 +296,7 @@ def main():
         sys.exit(1)
         
     if not os.path.exists(GCS_KEY_FILE):
-        print(f"Error: GCP credentials key file '{GCS_KEY_FILE}' not found in current folder.")
-        sys.exit(1)
+        print(f"Warning: GCP credentials key file '{GCS_KEY_FILE}' not found. GCS backups will be disabled, but serving local logs directly via Render will continue.")
         
     # Start a background web server to satisfy Render's port binding and health check requirements on Free Tier
     def run_web_server():
