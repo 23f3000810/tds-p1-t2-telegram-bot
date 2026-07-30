@@ -271,7 +271,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     # Write to local run.jsonl and upload
     log_entry = {
-        "ts": datetime.datetime.utcnow().isoformat() + "Z",
+        "ts": datetime.datetime.now(datetime.UTC).isoformat().replace("+00:00", "Z"),
         "chat_id": chat_id,
         "message": user_text,
         "agent_steps": agent_steps,

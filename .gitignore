@@ -1,0 +1,12 @@
+# Local configuration and keys
+.env
+key-*.json
+key.json
+venv/
+__pycache__/
+*.pyc
+*.session
+*.session-journal
+data/
+*.jsonl
+*.log
